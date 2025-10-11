@@ -1,5 +1,6 @@
 package mmf.tacocloud.tacos;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -7,7 +8,10 @@ import java.util.List;
 
 @Data
 public class TacoOrder {
+    @NotBlank(message = "Delivery name is required")
     private String deliveryName;
+
+    @NotBlank(message = "Street is required")
     private String deliveryStreet;
     private String deliveryCity;
     private String deliveryState;
