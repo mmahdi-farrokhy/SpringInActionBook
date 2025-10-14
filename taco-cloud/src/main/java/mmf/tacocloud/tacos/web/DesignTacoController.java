@@ -6,14 +6,15 @@ import mmf.tacocloud.tacos.Ingredient;
 import mmf.tacocloud.tacos.Taco;
 import mmf.tacocloud.tacos.TacoOrder;
 import mmf.tacocloud.tacos.Type;
+import mmf.tacocloud.tacos.data.IngredientRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 @Controller
@@ -21,9 +22,16 @@ import java.util.stream.Collectors;
 @SessionAttributes("tacoOrder")
 public class DesignTacoController {
 
+    private IngredientRepository ingredientRepository;
+
+    @Autowired
+    public DesignTacoController(IngredientRepository ingredientRepository) {
+        this.ingredientRepository = ingredientRepository;
+    }
+
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
-        List<Ingredient> ingredients = Arrays.asList(new Ingredient("FLTO", "Flour Tortilla", Type.WRAP), new Ingredient("COTO", "Corn Tortilla", Type.WRAP), new Ingredient("GRBF", "Ground Beef", Type.WRAP), new Ingredient("CARN", "Carnitas", Type.WRAP), new Ingredient("TMTO", "Diced Tomatoes", Type.WRAP), new Ingredient("LETC", "Lettuce", Type.WRAP), new Ingredient("CHED", "Cheddar", Type.WRAP), new Ingredient("JACK", "Monterrey Jack", Type.WRAP), new Ingredient("SLSA", "Salsa", Type.WRAP), new Ingredient("SRCR", "Sour Cream", Type.WRAP));
+        Iterable<Ingredient> ingredients = ingredientRepository.findAll();
 
         Type[] types = Type.values();
         for (Type type : types) {
@@ -31,8 +39,10 @@ public class DesignTacoController {
         }
     }
 
-    private Iterable<Ingredient> filterByType(List<Ingredient> ingredients, Type type) {
-        return ingredients.stream().filter(ingredient -> ingredient.getType().equals(type)).collect(Collectors.toList());
+    private Iterable<Ingredient> filterByType(Iterable<Ingredient> ingredients, Type type) {
+        return StreamSupport.stream(ingredients.spliterator(), false)
+                .filter(ingredient -> ingredient.getType().equals(type))
+                .collect(Collectors.toList());
     }
 
     @ModelAttribute(name = "tacoOrder")
