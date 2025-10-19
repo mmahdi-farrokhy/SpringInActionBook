@@ -2,7 +2,10 @@ package mmf.tacocloud.tacos.web;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import mmf.tacocloud.tacos.*;
+import mmf.tacocloud.tacos.Ingredient;
+import mmf.tacocloud.tacos.Taco;
+import mmf.tacocloud.tacos.TacoOrder;
+import mmf.tacocloud.tacos.Type;
 import mmf.tacocloud.tacos.data.IngredientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -63,7 +66,7 @@ public class DesignTacoController {
             return "design";
         }
 
-        tacoOrder.addTaco(new TacoUDT(taco.getName(), taco.getIngredients()));
+        tacoOrder.addTaco(taco);
         log.info("Processed taco: " + taco);
         return "redirect:/orders/current";
     }

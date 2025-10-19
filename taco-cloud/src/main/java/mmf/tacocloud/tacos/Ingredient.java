@@ -3,15 +3,15 @@ package mmf.tacocloud.tacos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.cassandra.core.mapping.PrimaryKey;
-import org.springframework.data.cassandra.core.mapping.Table;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
-@Table("ingredients")
+@Document(collation = "ingredients")
 public class Ingredient {
-    @PrimaryKey
+    @Id
     private final String id;
     private final String name;
     private final Type type;
