@@ -39,8 +39,6 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/authenticate")
-                        .usernameParameter("user")
-                        .passwordParameter("pwd")
                         .defaultSuccessUrl("/design"))
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage(("/login")))
