@@ -44,6 +44,7 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/design"))
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage(("/login")))
+                .logout(auth -> auth.logoutUrl("/logout"))
                 .build();
     }
 }
