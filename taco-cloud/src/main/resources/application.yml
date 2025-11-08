@@ -1,4 +1,12 @@
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          <oauth2>:
+            client-id: iddd
+            client-secret: secr
+            scope: email, public_profile
   datasource:
     generate-unique-name: false
     name: tacocloud
