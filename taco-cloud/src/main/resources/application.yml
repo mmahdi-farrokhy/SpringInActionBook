@@ -3,10 +3,23 @@ spring:
     oauth2:
       client:
         registration:
-          <oauth2>:
-            client-id: iddd
-            client-secret: secr
-            scope: email, public_profile
+          linkedin:
+            client-id: 77uujk9wwo0lqq
+            client-secret: WPL_AP1.xKWm7Ts8nLHl7RAh.uj3gsA==
+            client-name: LinkedIn
+            provider: linkedin
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            authorization-grant-type: authorization_code
+            scope:
+              - r_liteprofile
+              - r_emailaddress
+            client-authentication-method: client_secret_post
+        provider:
+          linkedin:
+            authorization-uri: https://www.linkedin.com/oauth/v2/authorization
+            token-uri: https://www.linkedin.com/oauth/v2/accessToken
+            user-info-uri: https://api.linkedin.com/v2/me
+            user-name-attribute: id
   datasource:
     generate-unique-name: false
     name: tacocloud
