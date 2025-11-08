@@ -40,7 +40,8 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .loginProcessingUrl("/authenticate")
                         .usernameParameter("user")
-                        .passwordParameter("pwd"))
+                        .passwordParameter("pwd")
+                        .defaultSuccessUrl("/design"))
                 .build();
     }
 }
