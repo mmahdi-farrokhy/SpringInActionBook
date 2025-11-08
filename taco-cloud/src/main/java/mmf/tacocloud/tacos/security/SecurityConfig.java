@@ -37,7 +37,10 @@ public class SecurityConfig {
                         .requestMatchers("/design", "/orders").hasRole("USER")
                         .requestMatchers("/", "/**").permitAll())
                 .formLogin(form -> form
-                        .loginPage("/login"))
+                        .loginPage("/login")
+                        .loginProcessingUrl("/authenticate")
+                        .usernameParameter("user")
+                        .passwordParameter("pwd"))
                 .build();
     }
 }
