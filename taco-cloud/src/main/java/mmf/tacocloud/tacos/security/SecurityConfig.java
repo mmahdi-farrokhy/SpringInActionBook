@@ -42,6 +42,8 @@ public class SecurityConfig {
                         .usernameParameter("user")
                         .passwordParameter("pwd")
                         .defaultSuccessUrl("/design"))
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage(("/login")))
                 .build();
     }
 }
