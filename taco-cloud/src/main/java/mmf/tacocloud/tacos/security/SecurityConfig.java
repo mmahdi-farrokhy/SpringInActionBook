@@ -4,12 +4,16 @@ import mmf.tacocloud.tacos.User;
 import mmf.tacocloud.tacos.data.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableGlobalMethodSecurity
 public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -26,5 +30,23 @@ public class SecurityConfig {
 
             throw new UsernameNotFoundException("User '" + username + "' not found");
         };
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/design", "/orders").hasRole("USER")
+                        .requestMatchers("/", "/**").permitAll())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/authenticate")
+                        .defaultSuccessUrl("/design"))
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage(("/login")))
+                .logout(auth -> auth.
+                        logoutUrl("/logout")
+                        .logoutSuccessUrl("/"))
+                .build();
     }
 }
