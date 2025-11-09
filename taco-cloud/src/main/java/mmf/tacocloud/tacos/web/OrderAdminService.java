@@ -21,7 +21,7 @@ public class OrderAdminService {
         orderRepository.deleteAll();
     }
 
-    @PostAuthorize("hasRole('ADMIN') || returnObject.user.userName == authentication.name")
+    @PostAuthorize("hasRole('ADMIN') || returnObject.user.username == authentication.name")
     public TacoOrder getOrder(Long id) {
         Optional<TacoOrder> tacoById = orderRepository.findById(id);
 
