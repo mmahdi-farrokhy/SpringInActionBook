@@ -26,3 +26,13 @@ spring:
     generate-unique-name: false
     name: tacocloud
     jndi-name: java:/comp/env/jdbc/tacoCloudDS
+
+logging:
+  file:
+    name: TacoCloud.log
+    path: /var/logs/
+  level:
+    root: warn
+    org:
+      springframework:
+        security: debug
