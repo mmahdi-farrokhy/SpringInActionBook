@@ -4,8 +4,8 @@ spring:
       client:
         registration:
           linkedin:
-            client-id: 77uujk9wwo0lqq
-            client-secret: WPL_AP1.xKWm7Ts8nLHl7RAh.uj3gsA==
+            client-id: ${LINKEDIN_CLIENT_ID}
+            client-secret: ${LINKEDIN_CLIENT_SECRET}
             client-name: LinkedIn
             provider: linkedin
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
