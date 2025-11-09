@@ -6,7 +6,7 @@ import mmf.tacocloud.tacos.TacoOrder;
 import mmf.tacocloud.tacos.User;
 import mmf.tacocloud.tacos.data.OrderRepository;
 import mmf.tacocloud.tacos.data.UserRepository;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,12 +35,11 @@ public class OrderController {
     }
 
     @PostMapping
-    public String processOrder(@Valid TacoOrder tacoOrder, Errors errors, SessionStatus sessionStatus, Authentication authentication) {
+    public String processOrder(@Valid TacoOrder tacoOrder, Errors errors, SessionStatus sessionStatus, @AuthenticationPrincipal User user) {
         if (errors.hasErrors()) {
             return "orderForm";
         }
 
-        User user = (User) authentication.getPrincipal();
         tacoOrder.setUser(user);
         log.info("Order submitted {}", tacoOrder);
         orderRepository.save(tacoOrder);
