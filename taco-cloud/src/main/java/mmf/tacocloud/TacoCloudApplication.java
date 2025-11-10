@@ -17,7 +17,7 @@ public class TacoCloudApplication {
     }
 
     @Bean
-    @Profile({"dev", "qa"})
+    @Profile("!prod")
     public CommandLineRunner dataLoader(IngredientRepository repo) {
         return args -> {
             repo.save(new Ingredient("FLTO", "Flour Tortilla", Type.WRAP));
