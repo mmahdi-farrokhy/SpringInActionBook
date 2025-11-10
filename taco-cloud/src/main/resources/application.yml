@@ -43,3 +43,17 @@ greeting:
 taco:
   orders:
     page-size: 10
+
+---
+spring:
+  profiles:
+    prod
+
+  datasource:
+    url: jdbc:mysql://localhost/tacocloud
+    username: tacouser
+    password: tacopassword
+
+logging:
+  level:
+    tacos: warn
