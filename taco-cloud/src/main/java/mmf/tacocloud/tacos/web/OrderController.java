@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import mmf.tacocloud.tacos.TacoOrder;
 import mmf.tacocloud.tacos.User;
 import mmf.tacocloud.tacos.data.OrderRepository;
-import mmf.tacocloud.tacos.data.UserRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -28,12 +27,12 @@ import java.util.List;
 @SessionAttributes("tacoOrder")
 public class OrderController {
 
-    private final UserRepository userRepository;
+    private OrderProps props;
     private OrderRepository orderRepository;
 
-    public OrderController(OrderRepository orderRepository, UserRepository userRepository) {
+    public OrderController(OrderProps props, OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
-        this.userRepository = userRepository;
+        this.props = props;
     }
 
     @GetMapping("/current")
@@ -59,7 +58,7 @@ public class OrderController {
 
     @GetMapping
     public String ordersForUser(@AuthenticationPrincipal User user, Model model) {
-        Pageable pageable = PageRequest.of(0, 20);
+        Pageable pageable = PageRequest.of(0, props.getPageSize());
         List<TacoOrder> orders = orderRepository.findByUserOrderByPlacedAtDesc(user, pageable);
 
         model.addAttribute("orders", orders);
