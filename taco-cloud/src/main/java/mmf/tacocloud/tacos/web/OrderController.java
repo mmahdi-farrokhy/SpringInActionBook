@@ -6,6 +6,8 @@ import mmf.tacocloud.tacos.TacoOrder;
 import mmf.tacocloud.tacos.User;
 import mmf.tacocloud.tacos.data.OrderRepository;
 import mmf.tacocloud.tacos.data.UserRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -55,7 +59,10 @@ public class OrderController {
 
     @GetMapping
     public String ordersForUser(@AuthenticationPrincipal User user, Model model) {
-        model.addAttribute("orders", orderRepository.findByUserOrderByPlacedAtDesc(user));
+        Pageable pageable = PageRequest.of(0, 20);
+        List<TacoOrder> orders = orderRepository.findByUserOrderByPlacedAtDesc(user, pageable);
+
+        model.addAttribute("orders", orders);
         return "orderList";
     }
 }
