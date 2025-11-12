@@ -30,10 +30,13 @@ public class TacoController {
     public ResponseEntity<Taco> tacoById(@PathVariable Integer id) {
         Optional<Taco> optTaco = tacoRepository.findById(id);
 
-        if (optTaco.isPresent()) {
-            return new ResponseEntity<>(optTaco.get(), HttpStatus.OK);
-        }
+        return optTaco.map(taco -> new ResponseEntity<>(taco, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+    }
 
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    @PostMapping(consumes = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Taco postTaco(@RequestBody Taco taco) {
+        return tacoRepository.save(taco);
     }
 }
