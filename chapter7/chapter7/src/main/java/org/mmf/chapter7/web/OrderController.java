@@ -5,8 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.mmf.chapter7.TacoOrder;
 import org.mmf.chapter7.User;
 import org.mmf.chapter7.data.OrderRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -113,5 +115,14 @@ public class OrderController {
         }
 
         return orderRepository.save(order);
+    }
+
+    @DeleteMapping("/{orderId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteOrder(@PathVariable("orderId") Long orderId) {
+        try {
+            orderRepository.deleteById(orderId);
+        } catch (EmptyResultDataAccessException e) {
+        }
     }
 }
