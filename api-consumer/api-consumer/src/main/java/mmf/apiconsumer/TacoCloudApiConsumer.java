@@ -23,4 +23,10 @@ public class TacoCloudApiConsumer {
         log.info("Fetched time: {}", responseEntity.getHeaders().getDate());
         return responseEntity.getBody();
     }
+
+    public void updateIngredient(String ingredientId) {
+        Ingredient ingredient = getIngredientById(ingredientId);
+        restTemplate.put("http://localhost:8080/data-api/ingredients/{id}",
+                ingredient, ingredientId);
+    }
 }
