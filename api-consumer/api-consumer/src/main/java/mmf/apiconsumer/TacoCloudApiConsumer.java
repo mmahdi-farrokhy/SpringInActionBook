@@ -16,7 +16,7 @@ public class TacoCloudApiConsumer {
 
     public Ingredient getIngredientById(String ingredientId) {
         ResponseEntity<Ingredient> responseEntity =
-                restTemplate.getForEntity("http://localhost:8080/ingredients/{id}",
+                restTemplate.getForEntity("http://localhost:8080/data-api/ingredients/{id}",
                         Ingredient.class,
                         ingredientId);
 
