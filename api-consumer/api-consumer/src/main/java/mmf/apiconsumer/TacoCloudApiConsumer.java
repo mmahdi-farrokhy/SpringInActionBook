@@ -1,13 +1,11 @@
 package mmf.apiconsumer;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-
+@Slf4j
 @Component
 public class TacoCloudApiConsumer {
     private final RestTemplate restTemplate;
@@ -17,12 +15,12 @@ public class TacoCloudApiConsumer {
     }
 
     public Ingredient getIngredientById(String ingredientId) {
-        Map<String, String> uriVariables = new HashMap<>();
-        uriVariables.put("id", ingredientId);
-        URI uri = UriComponentsBuilder
-                .fromHttpUrl("http://localhost:8080/ingredients/{id}")
-                .build(uriVariables);
+        ResponseEntity<Ingredient> responseEntity =
+                restTemplate.getForEntity("http://localhost:8080/ingredients/{id}",
+                        Ingredient.class,
+                        ingredientId);
 
-        return restTemplate.getForObject(uri, Ingredient.class);
+        log.info("Fetched time: {}", responseEntity.getHeaders().getDate());
+        return responseEntity.getBody();
     }
 }
