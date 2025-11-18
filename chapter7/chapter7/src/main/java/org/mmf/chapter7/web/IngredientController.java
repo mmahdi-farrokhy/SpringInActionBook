@@ -19,7 +19,6 @@ public class IngredientController {
     }
 
     @GetMapping
-    @PreAuthorize("#{hasRole('ADMIN')}")
     public Iterable<Ingredient> allIngredients() {
         return ingredientRepository.findAll();
     }
@@ -33,6 +32,7 @@ public class IngredientController {
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("#{hasRole('ADMIN')}")
     public void deleteIngredient(@PathVariable("id") String id) {
         ingredientRepository.deleteById(id);
     }
