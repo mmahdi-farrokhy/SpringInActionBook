@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
@@ -18,6 +18,9 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
+import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
+import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.web.SecurityFilterChain;
 
 import java.security.KeyPair;
@@ -32,11 +35,26 @@ public class AuthorizationServerConfig {
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
-        OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
-        return http
-                .formLogin(form -> {
-                })
-                .build();
+        OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
+                new OAuth2AuthorizationServerConfigurer();
+
+        // Restrict this filter chain to only the authorization server endpoints
+        http.securityMatcher(authorizationServerConfigurer.getEndpointsMatcher());
+
+        // Configure OAuth2 endpoints (authorization, token, etc.)
+        http.with(authorizationServerConfigurer, config -> {
+            config.authorizationEndpoint(authorization -> {
+                // customize authorization endpoint if needed
+            });
+            config.tokenEndpoint(token -> {
+                // customize token endpoint if needed
+            });
+        });
+
+        // Enable form login for authorization server
+        http.formLogin(Customizer.withDefaults());
+
+        return http.build();
     }
 
     @Bean
@@ -52,7 +70,8 @@ public class AuthorizationServerConfig {
                         .scope("writeIngredients")
                         .scope("deleteIngredients")
                         .scope(OidcScopes.OPENID)
-                        .clientSettings(clientSettings -> clientSettings.requireUserConsent(true))
+//                        .clientSettings(clientSettings -> clientSettings.requireUserConsent(true))
+                        .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                         .build();
 
         return new InMemoryRegisteredClientRepository(registeredClient);

@@ -39,6 +39,12 @@ public class User implements UserDetails {
         this.username = username;
         this.password = password;
         this.role = role;
+        this.fullName = "";
+        this.street = "";
+        this.city = "";
+        this.state = "";
+        this.zip = "";
+        this.phoneNumber = "";
     }
 
     @Override
